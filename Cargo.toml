@@ -10,3 +10,4 @@ serde_yml = {version = "*"}
 tokio = {version = "*", features = ["full"]}
 
 log = {version = "*"}
+colored = {version = "*"}

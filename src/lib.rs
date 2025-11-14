@@ -1,3 +1,4 @@
+use colored::Colorize as _;
 use serde::{Deserialize, Serialize};
 
 pub trait Config: Default + Serialize + for<'de> Deserialize<'de> {
@@ -12,7 +13,7 @@ pub trait Config: Default + Serialize + for<'de> Deserialize<'de> {
                     .await
                     .unwrap();
 
-                log::warn!("'{}' config not found by path: {path}", Self::NAME);
+                log::warn!("'{}' config not found by path: {path}", Self::NAME.bold());
                 log::info!(
                     "{} config was automaticly created by path: {path}",
                     Self::NAME
