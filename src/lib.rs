@@ -13,17 +13,20 @@ pub trait Config: Default + Serialize + for<'de> Deserialize<'de> {
                     .await
                     .unwrap();
 
-                log::warn!("'{}' config not found by path: {path}", Self::NAME.bold());
-                log::info!(
+                log::warn!(
+                    "'{}' config not found by path: {path}",
+                    Self::NAME.bold().cyan()
+                );
+                log::debug!(
                     "{} config was automaticly created by path: {path}",
-                    Self::NAME
+                    Self::NAME.bold().cyan()
                 );
 
                 this
             } else {
                 let this =
                     serde_yml::from_str(&tokio::fs::read_to_string(&*path).await.unwrap()).unwrap();
-                log::trace!("{} config was loaded", Self::NAME);
+                log::trace!("{} config was loaded", Self::NAME.bold().cyan());
                 this
             }
         }
