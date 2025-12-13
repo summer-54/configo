@@ -18,7 +18,7 @@ pub trait Config: Default + Serialize + for<'de> Deserialize<'de> {
                     Self::NAME.bold().cyan()
                 );
                 log::debug!(
-                    "{} config was automaticly created by path: {path}",
+                    "'{}' config was automaticly created by path: {path}",
                     Self::NAME.bold().cyan()
                 );
 
@@ -26,7 +26,7 @@ pub trait Config: Default + Serialize + for<'de> Deserialize<'de> {
             } else {
                 let this =
                     serde_yml::from_str(&tokio::fs::read_to_string(&*path).await.unwrap()).unwrap();
-                log::trace!("{} config was loaded", Self::NAME.bold().cyan());
+                log::trace!("'{}' config was loaded", Self::NAME.bold().cyan());
                 this
             }
         }
