@@ -37,7 +37,7 @@ dependencies = [
 
 [[package]]
 name = "configo"
-version = "1.0.2"
+version = "1.0.3"
 dependencies = [
  "colored",
  "log",
