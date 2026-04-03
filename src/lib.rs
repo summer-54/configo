@@ -1,12 +1,12 @@
 use colored::Colorize as _;
 use serde::{Deserialize, Serialize};
-use tokio::io::{AsyncWriteExt, BufWriter};
+use tokio::io::AsyncWriteExt;
 
 pub trait Config: Default + Serialize + for<'de> Deserialize<'de> {
     const NAME: &'static str;
-    fn load(dir: &str) -> impl Future<Output = Self> {
+    fn load(dir: impl AsRef<std::path::Path>) -> impl Future<Output = Self> {
         async move {
-            let path = format!("{dir}/{}.yaml", Self::NAME).into_boxed_str();
+            let path = dir.as_ref().join(Self::NAME).with_extension("yaml");
             if !tokio::fs::try_exists(&*path).await.unwrap() {
                 let this = Self::default();
                 let mut file = tokio::fs::File::create(&*path).await.unwrap();
@@ -14,12 +14,14 @@ pub trait Config: Default + Serialize + for<'de> Deserialize<'de> {
                     .await
                     .unwrap();
                 log::warn!(
-                    "'{}' config not found by path: {path}",
-                    Self::NAME.bold().cyan()
+                    "'{}' config not found by path: {}",
+                    Self::NAME.bold().cyan(),
+                    path.display()
                 );
                 log::debug!(
-                    "'{}' config was automaticly created by path: {path}",
-                    Self::NAME.bold().cyan()
+                    "'{}' config was automaticly created by path: {}",
+                    Self::NAME.bold().cyan(),
+                    path.display()
                 );
 
                 this
